@@ -187,6 +187,6 @@ poetry.toml
 .history
 .ionide
 # Log and snipe messages 
-code/log/log.txt
-code/snipe/snipe.json
+code/log/
+code/snipe/
 # End of https://www.toptal.com/developers/gitignore/api/python,visualstudiocode
