@@ -1,0 +1,11 @@
+{
+    "version": "0.1",
+    "description": "discord bot for the zoo discord server",
+    "date": "07-01-2023",
+    "authors":{
+        "realName": "Hoang Tung",
+        "name":"Mahiru",
+        "discord": "Mahiru#1542",
+        "github": "mahiru7229"
+    }
+}
