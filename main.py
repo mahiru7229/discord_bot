@@ -9,6 +9,10 @@ import json
 import get_prefix
 load_dotenv()
 
+def time_for_log():
+    return time.strftime("[%H:%M:%S|%m-%d-%Y]")
+logging.basicConfig(filename=os.path.join("code","log","log.txt"),
+ level=logging.DEBUG,format="{} %(message)s".format(time_for_log()),encoding='utf-8')
 intents = discord.Intents.all()
 intents.members = True
 
@@ -18,7 +22,9 @@ client = commands.Bot(command_prefix=prefix,intents=intents)
 @client.event
 async def on_ready():
     print("Bot is logged in !!!")
-
+@client.event
+async def on_message(message):
+    logging.debug("[DISCORD]{}#{}({})|{}|{}({})|{}".format(message.author.name,message.author.discriminator,message.author.id, message.guild.name,message.channel.name,message.channel.id,message.content))
 
 @client.command(name="shiina")
 async def ping(ctx):
@@ -84,5 +90,6 @@ async def saveData(data):
 
 async def get_time():
     return time.strftime("%a, %b %d, %Y | %H:%M:%S")
-    
+
+
 client.run(os.getenv("TOKEN"))
