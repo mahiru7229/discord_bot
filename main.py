@@ -11,8 +11,7 @@ load_dotenv()
 
 def time_for_log():
     return time.strftime("[%H:%M:%S|%m-%d-%Y]")
-logging.basicConfig(filename=os.path.join("code","log","log.txt"),
- level=logging.DEBUG,format="{} %(message)s".format(time_for_log()),encoding='utf-8')
+
 intents = discord.Intents.all()
 intents.members = True
 
@@ -24,7 +23,26 @@ async def on_ready():
     print("Bot is logged in !!!")
 @client.event
 async def on_message(message):
-    logging.debug("[DISCORD]{}#{}({})|{}|{}({})|{}".format(message.author.name,message.author.discriminator,message.author.id, message.guild.name,message.channel.name,message.channel.id,message.content))
+    if message.author == client.user:
+        return
+    logging.basicConfig(filename=os.path.join("code","log","log.txt"),
+ level=logging.DEBUG,format="{} %(message)s".format(time_for_log()),encoding='utf-8')
+    logging.debug("{}#{}({})|{}|{}({})|{}".format(message.author.name,message.author.discriminator,message.author.id, message.guild.name,message.channel.name,message.channel.id,message.content))
+    await client.process_commands(message)
+@client.event
+async def on_message_edit(bf,af):
+    logging.basicConfig(filename=os.path.join("code","log","log.txt"),level=logging.DEBUG,format="{} %(message)s".format(time_for_log()),encoding='utf-8')
+    logging.debug("{}#{}({}) (EDITED)|{}|{}({})|{} (edited)--> {}".format(bf.author.name,bf.author.discriminator,bf.author.id, bf.guild.name,bf.channel.name,bf.channel.id,bf.content,af.content))
+
+@client.event
+async def on_message_delete(message):
+    snipe = await get_snipe()
+    snipe["author"] = "{}#{}".format(message.author.name, message.author.discriminator)
+    snipe["message_content"] = message.content
+    snipe["message_id"] = message.id
+    snipe["author_id"] = message.author.id
+    with open(os.path.join("code","snipe","snipe.json"),"w") as f:
+        json.dump(snipe,f,indent=4)
 
 @client.command(name="shiina")
 async def ping(ctx):
@@ -47,6 +65,21 @@ async def about(ctx):
     embed.add_field(name="Version",value=inf["version"])
     embed.add_field(name="Date created: ",value="{}".format(inf["date"]))
     embed.set_footer(text=await get_time())
+    await ctx.send(embed=embed)
+
+@client.command()
+async def coin(ctx):
+    print(ctx.message.attachments[0].url)
+    await ctx.send("work")
+
+@client.command(name="snipe")
+async def snipe(ctx):
+    snipe_ = await get_snipe()
+    user_pfp = await client.fetch_user(snipe_["author_id"])
+    embed = discord.Embed(color=discord.Color.from_rgb(12, 225, 232))
+    embed.set_author(name="Người gửi: {}".format(snipe_["author"]), icon_url=user_pfp.avatar)
+    embed.add_field(name="Content: ", value=snipe_["message_content"])
+    embed.set_footer(text="Message ID: {} | Author ID: {}".format(snipe_["message_id"], snipe_["author_id"]))
     await ctx.send(embed=embed)
 
 @client.command(name="give")
@@ -90,6 +123,8 @@ async def saveData(data):
 
 async def get_time():
     return time.strftime("%a, %b %d, %Y | %H:%M:%S")
-
+async def get_snipe():
+    with open(os.path.join("code","snipe","snipe.json"),"r") as f:
+        return json.loads(f.read())
 
 client.run(os.getenv("TOKEN"))
