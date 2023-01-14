@@ -81,6 +81,22 @@ async def snipe(ctx):
     embed.add_field(name="Content: ", value=snipe_["message_content"])
     embed.set_footer(text="Message ID: {} | Author ID: {}".format(snipe_["message_id"], snipe_["author_id"]))
     await ctx.send(embed=embed)
+@client.command(name="kick")
+@commands.has_permissions(kick_members= True)
+async def kick(ctx, userName: discord.User,*,reason):
+    await ctx.guild.kick(userName)
+    try: 
+        embed = discord.Embed(title="Bạn đã kick {}".format(userName),color=discord.Color.from_rgb(12, 225, 232))
+        embed.add_field(name="Lý do:", value=reason)
+        embed.set_footer(text=await get_time())
+        await ctx.send(embed=embed)
+    except:
+        embed = discord.Embed(title="Bạn đã kick {}".format(userName),color=discord.Color.from_rgb(12, 225, 232))
+        embed.add_field(name="Lý do:", value="")
+        embed.set_footer(text=await get_time())
+        await ctx.send(embed=embed)
+
+
 
 @client.command(name="give")
 async def give(ctx, mention, amount):
