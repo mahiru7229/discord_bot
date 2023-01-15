@@ -189,4 +189,6 @@ poetry.toml
 # Log and snipe messages 
 code/log/
 code/snipe/
+#image files
+code/img
 # End of https://www.toptal.com/developers/gitignore/api/python,visualstudiocode

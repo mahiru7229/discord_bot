@@ -44,6 +44,14 @@ async def on_message_delete(message):
     with open(os.path.join("code","snipe","snipe.json"),"w") as f:
         json.dump(snipe,f,indent=4)
 
+
+@client.command(name="image")
+async def send_img(ctx):
+    with open(os.path.join("code","img","gbao.png"),"rb") as f:
+        image = discord.File(f)
+    await ctx.reply(file=image)
+
+
 @client.command(name="shiina")
 async def ping(ctx):
     await ctx.reply("**{}** \n`(Ping: {}ms)`".format("Này, có gì không vậy ?",round(client.latency, 1)))
