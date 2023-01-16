@@ -186,9 +186,9 @@ poetry.toml
 # Ignore all local history of files
 .history
 .ionide
-# Log and snipe messages 
+# hidden files 
 code/log/
 code/snipe/
-#image files
 code/img
+code/vote
 # End of https://www.toptal.com/developers/gitignore/api/python,visualstudiocode
