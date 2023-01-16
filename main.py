@@ -7,6 +7,7 @@ import sys
 import logging
 import json
 import get_prefix
+import asyncio
 load_dotenv()
 
 def time_for_log():
@@ -123,6 +124,34 @@ async def give(ctx, mention, amount):
     embed.add_field(name="Số tiền gửi: ", value="{} :banana:".format(int(amount)))
     embed.add_field(name="Số tiền còn lại: ", value="{} :banana:".format(a))
     embed.set_footer(text = await get_time())
+
+# @client.command(name="vote")
+# async def vote(ctx, time, id, *, title):
+#     await vote_id_exists(id, time, title)
+#     vote = open_vote()
+#     first_embed = discord.Embed(title=title, color=discord.Color.from_rgb(255,255,255))
+#     first_embed.add_field(name="Time: ", value = f"{time}s", inline=True)
+#     first_embed.add_field(name="Yes vote counting: ", value=vote["count_yes"], inline = False)
+#     first_embed.add_field(name="No vote counting: ", value=vote["count_no"], inline = True)
+#     first_embed.set_footer(text = await get_time())
+#     msg = await ctx.send(embed=first_embed)
+    
+#     while True:
+#         asyncio.sleep(1)
+#         second_embed = discord.Embed(title=title, color=discord.Color.from_rgb(255,255,255))
+#         second_embed.add_field(name="Time: ", value = f"{time}s", inline=True)
+#         second_embed.add_field(name="Yes vote counting: ", value=vote["count_yes"], inline = False)
+#         second_embed.add_field(name="No vote counting: ", value=vote["count_no"], inline = True)
+#         second_embed.set_footer(text = await get_time())
+#         msg.edit(content =)
+
+
+
+
+
+
+
+
 async def openBank():
     """Đọc thông tin túi tiền"""
     with open(os.path.join("code","economy","money.json"),"r") as f:
@@ -150,5 +179,27 @@ async def get_time():
 async def get_snipe():
     with open(os.path.join("code","snipe","snipe.json"),"r") as f:
         return json.loads(f.read())
+
+async def open_vote():
+    with open(os.path.join("code","vote","vote_id.json"),"r") as f:
+        return json.loads(f.read())
+
+
+
+async def vote_id_exists(vote_id, time,title):
+    vote = open_vote()
+    if str(vote_id) not in vote:
+        vote[str(vote_id)] = {}
+        vote[str(vote_id)]["time"] = await get_time()
+        vote[str(vote_id)]["vote_title"] = title
+        vote[str(vote_id)]["vote_time"] = int(time)
+        vote[str(vote_id)]["count_yes"] = 0
+        vote[str(vote_id)]["count_no"] = 0
+        with open(os.path.join("code","vote","vote_id.json"),"w") as f:
+            json.dump(vote,f,indent=4)
+    else:
+        print("u suck")
+
+
 
 client.run(os.getenv("TOKEN"))
