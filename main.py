@@ -1,5 +1,6 @@
 from discord.ext import commands, tasks
 from dotenv import load_dotenv
+from keep_alive import keep_alive
 import discord
 import os
 import time
@@ -201,5 +202,5 @@ async def vote_id_exists(vote_id, time,title):
         print("u suck")
 
 
-
+keep_alive()
 client.run(os.getenv("TOKEN"))
