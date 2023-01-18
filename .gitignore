@@ -192,3 +192,4 @@ code/snipe/
 code/img
 code/vote
 # End of https://www.toptal.com/developers/gitignore/api/python,visualstudiocode
+code/log/log.txt
